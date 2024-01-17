@@ -1,0 +1,12 @@
+altair
+numpy
+pandas
+pydeck
+streamlit
+streamlit-option-menu
+matplotlib
+st-annotated-text
+st_click_detector
+beautifulsoup4
+spacy
+streamlit_authenticator
