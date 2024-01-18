@@ -23,7 +23,8 @@ from pathlib import Path
 
 
 def run():
-   
+   if not 'entities_colors' in st.session_state:
+       st.info('You must add entities!')
    if 'entities_colors' in st.session_state:
     print(st.session_state['entities_colors'])
 
