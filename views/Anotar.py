@@ -23,16 +23,19 @@ from pathlib import Path
 
 
 def run():
-   if not 'entities_colors' in st.session_state:
+    if not 'entities_colors' in st.session_state:
        st.info('You must add entities!')
-   if 'entities_colors' in st.session_state:
-    print(st.session_state['entities_colors'])
+
 
     option= 'Annotate'
     if option == 'Annotate':
         uploaded_file= st.file_uploader("Choose a file")
         texto= ''
-        st.session_state['uploaded_file']= uploaded_file
+        if uploaded_file is None:
+           if 'annot_file' in st.session_state:
+               uploaded_file= st.session_state['annot_file']
+        else:
+            st.session_state['annot_file']= uploaded_file
     
         if uploaded_file is not None:
             #print(uploaded_file) 
@@ -91,8 +94,9 @@ def run():
         #print(lista_entidades)
         #lista_entidades= ['A', 'B']
         
-        menu_entities= "{title: 'Remove all', icon: 'delete', onclick:function(){removeAll();}},"
-        menu_entities+= "{title: 'Save ', shortcut:'Ctrl + S', icon: 'save', onclick:function(){saveAll();}},"
+        menu_entities= "{title: 'Remove all', icon: 'delete', shortcut:'Ctrl + A',  onclick:function(){removeAll();}},"
+        menu_entities+= "{title: 'Reload', icon: 'refresh', shortcut: 'Ctrl +  R', onclick:function(){reload();}},"
+        menu_entities+= "{title: 'Download ', shortcut:'Ctrl + D', icon: 'download', onclick:function(){download();}},"
         menu_entities+= "{type: 'line'},"
 
         for i in range(0, len(lista_entidades)):
@@ -143,7 +147,8 @@ def run():
         var contextMenu = jSuites.contextmenu(document.getElementById('contextmenu'), {
             items:['''+menu_entities+'''],
              onclick:function() {
-                //contextMenu.close(false);
+                if ( document.getElementById('search') != document.activeElement)
+                    contextMenu.close(false);
                 
             }
         });
@@ -221,12 +226,19 @@ def run():
     }
     var toggleField= false;
 
-    function saveAll(){
+    function reload(){
+      let string_HTML= window.localStorage.getItem("string_HTML");
+      result= document.getElementById("texto_anotacion");
+      result.innerHTML= string_HTML
+    }
+    function download(){
         result= document.getElementById("texto_anotacion");
         html= result.innerHTML;
         console.log(html);
         var blob= new Blob([result.innerHTML], {type:'text/html'});
         saveAs(blob, 'result.html');
+
+        window.localStorage.setItem("string_HTML", html)
     }
 
     function removeAll(){
@@ -336,7 +348,11 @@ def run():
         
     var elem;
     elem= document.getElementById("texto_anotacion");
-   
+    notepad= document.getElementById("notepad");
+    notepad.addEventListener("load", (event)=>{
+        console.log('Cargado el TEXTO');
+    });
+
     document.addEventListener('dblclick', function(event){
         
         event.preventDefault();
@@ -459,8 +475,9 @@ def run():
     </script>
     
         '''
-      
-        r= components.html(html_string, height=800, scrolling=True)
+        
+        components.html(html_string, height=800, scrolling=True)
+        
         if st.button("Save Annotations"):
               print('Anotaciones guardadas') 
                
