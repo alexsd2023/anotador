@@ -39,7 +39,7 @@ authenticator = stauth.Authenticate(
     config['preauthorized']
 )
 
-name, authentication_status, username= authenticator.login('Login', location= 'main')
+name, authentication_status, username= authenticator.login('Login', "main")
 #set_background('./background.png')
 
 if authentication_status:
