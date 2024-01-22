@@ -40,16 +40,16 @@ for un, name, pw in zip(usernames, names, hashed_passwords):
     user_dict = {"name":name,"password":pw}
     credentials["usernames"].update({un:user_dict})
 
-authenticator = stauth.Authenticate(credentials, "lanc_cookie_name", "lanc_key", cookie_expiry_days=30)
+#authenticator = stauth.Authenticate(credentials, "lanccookie", "lanckey", cookie_expiry_days=30)
 
 
-#authenticator = stauth.Authenticate(
-#    config['credentials'],
-#    config['cookie']['name'],
-#    config['cookie']['key'],
-#    config['cookie']['expiry_days'],
-#    config['preauthorized']
-#)
+authenticator = stauth.Authenticate(
+   config['credentials'],
+   config['cookie']['name'],
+   config['cookie']['key'],
+   config['cookie']['expiry_days'],
+   config['preauthorized']
+)
 
 name, authentication_status, username= authenticator.login("main")
 #set_background('./background.png')
@@ -58,7 +58,9 @@ if authentication_status:
 
     
     
-    authenticator.logout('Logout', 'sidebar')
+    if  authenticator.logout('Logout', 'sidebar'):
+        st.cache_data.clear()
+
     with st.sidebar:
         
         option= option_menu("Annotation Tool", ["Entities", "Annotate", "View Annotations", "NER", "File Logs", \
