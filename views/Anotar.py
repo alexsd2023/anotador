@@ -482,7 +482,7 @@ def run():
             if uploaded_file:
                 if os.path.getsize('file_logs.csv') != 0:
                     df= pd.read_csv('file_logs.csv', usecols=['Filename', 'Status'])
-                    df= df.append({'Filename': uploaded_file.name, 'Status': 'Pending'}, ignore_index= True)
+                    df.loc[len(df.index)]= [uploaded_file.name, 'Pending']
                 else:
                     df= pd.DataFrame([[uploaded_file.name, 'Pending']], columns= ['Filename', 'Status'])
                 print(df)
