@@ -478,10 +478,16 @@ def run():
         
         components.html(html_string, height=800, scrolling=True)
         
-        if st.button("Save Annotations"):
-              print('Anotaciones guardadas') 
-               
-
+        if st.button("Log File Status"):
+            if uploaded_file:
+                if os.path.getsize('file_logs.csv') != 0:
+                    df= pd.read_csv('file_logs.csv', usecols=['Filename', 'Status'])
+                    df= df.append({'Filename': uploaded_file.name, 'Status': 'Pending'}, ignore_index= True)
+                else:
+                    df= pd.DataFrame([[uploaded_file.name, 'Pending']], columns= ['Filename', 'Status'])
+                print(df)
+                df.to_csv('file_logs.csv', encoding= 'utf-8', index= True)
+                print('File saved')
         
     
     
