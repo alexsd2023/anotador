@@ -36,7 +36,7 @@ passwords= ['123' ,'123', '123', '123']
 credentials = {"usernames":{}}
 
 hashed_passwords = stauth.Hasher(passwords).generate()
-for un, name, pw in zip(usernames, names, hashed_passwords):   
+for un, name, pw in zip(usernames, names, passwords):   
     user_dict = {"name":name,"password":pw}
     credentials["usernames"].update({un:user_dict})
 
