@@ -36,11 +36,12 @@ passwords= ['123' ,'123', '123', '123']
 credentials = {"usernames":{}}
 
 hashed_passwords = stauth.Hasher(passwords).generate()
-for un, name, pw in zip(usernames, names, passwords):   
+for un, name, pw in zip(usernames, names, hashed_passwords):   
     user_dict = {"name":name,"password":pw}
     credentials["usernames"].update({un:user_dict})
 
-authenticator = stauth.Authenticate(credentials, "cookie_name", "random_key", cookie_expiry_days=30)
+#authenticator = stauth.Authenticate(credentials, "cookie_name", "random_key", cookie_expiry_days=30)
+authenticator= stauth.Authenticate(credentials, "app_home", "auth", cookie_expiry_days=30)
 
 #authenticator = stauth.Authenticate(
 #    config['credentials'],
