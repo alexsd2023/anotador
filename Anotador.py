@@ -50,7 +50,7 @@ authenticator = stauth.Authenticate(credentials, "cokie_name", "random_key", coo
 #    config['preauthorized']
 #)
 
-name, authentication_status, username= authenticator.login("Login", "main")
+name, authentication_status, username= authenticator.login("main")
 #set_background('./background.png')
 
 if authentication_status:
