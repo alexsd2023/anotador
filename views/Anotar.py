@@ -487,6 +487,7 @@ def run():
                     df= pd.DataFrame([[uploaded_file.name, 'Pending']], columns= ['Filename', 'Status'])
                 print(df)
                 df.to_csv('file_logs.csv', encoding= 'utf-8', index= True)
+                st.session_state['file_logs']= df
                 print('File saved')
         
     
