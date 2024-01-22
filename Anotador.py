@@ -32,7 +32,7 @@ def set_background(png_file):
     st.markdown(page_bg_img, unsafe_allow_html=True)
 usernames= ['asanchez', 'patricia', 'mariana', 'rodrigo']
 names= ['Alexander', 'Patricia', 'Mariana', 'Rodrigo']
-passwords= ['123' ,'123', '123', '123']
+passwords= ['12345' ,'12345', '12345', '12345']
 credentials = {"usernames":{}}
 
 hashed_passwords = stauth.Hasher(passwords).generate()
@@ -40,16 +40,16 @@ for un, name, pw in zip(usernames, names, hashed_passwords):
     user_dict = {"name":name,"password":pw}
     credentials["usernames"].update({un:user_dict})
 
-#authenticator = stauth.Authenticate(credentials, "lanc_cookie_name", "lanc_key", cookie_expiry_days=30)
+authenticator = stauth.Authenticate(credentials, "lanc_cookie_name", "lanc_key", cookie_expiry_days=30)
 
 
-authenticator = stauth.Authenticate(
-    config['credentials'],
-    config['cookie']['name'],
-    config['cookie']['key'],
-    config['cookie']['expiry_days'],
-    config['preauthorized']
-)
+#authenticator = stauth.Authenticate(
+#    config['credentials'],
+#    config['cookie']['name'],
+#    config['cookie']['key'],
+#    config['cookie']['expiry_days'],
+#    config['preauthorized']
+#)
 
 name, authentication_status, username= authenticator.login("main")
 #set_background('./background.png')
