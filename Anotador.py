@@ -50,16 +50,18 @@ authenticator = stauth.Authenticate(
    config['cookie']['expiry_days'],
    config['preauthorized']
 )
-
-name, authentication_status, username= authenticator.login("main")
+name= ''
+authentication_status= False
+username= ''
+name, authentication_status, username= authenticator.login("Login", "main")
 #set_background('./background.png')
 
 if authentication_status:
 
-    
-    
-    if  authenticator.logout('Logout', 'sidebar'):
-        st.cache_data.clear()
+    authenticator.logout('Logout', 'sidebar')
+    st.cache_data.clear()
+    for key in st.session_state.keys():
+         del st.session_state[key]
 
     with st.sidebar:
         
@@ -82,12 +84,8 @@ if authentication_status:
     elif option == 'Users':
         Users.run()
     
-
-    
-
 elif authentication_status == False:
-    
-    st.error('Username/password is incorrect')
+   st.error('Username/password is incorrect')
 elif authentication_status == None:
     st.warning('Please enter your username and password')
 
