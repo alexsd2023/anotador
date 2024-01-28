@@ -521,6 +521,10 @@ def run():
         #st.write('Description: ')
         #st.write(list_descripciones[index])
         
-        st.button("Save Annotations")
-    
+        if st.button("Log File Status"):
+            if uploaded_file:
+                df= pd.read_csv('file_logs.csv')
+                df.loc[len(df)]= [uploaded_file]
+                df.to_csv('file_logs.csv')
+                print('File saved')
     

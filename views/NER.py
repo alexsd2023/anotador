@@ -9,8 +9,11 @@ import tempfile
 from pathlib import Path
 
 def run():
-        if 'uploaded_file' in st.session_state:
-            uploaded_file= st.session_state['uploaded_file']
+        
+        tab1, tab2= st.tabs(['Entities', 'Parts of speech'])
+        
+        if 'annot_file' in st.session_state:
+            uploaded_file= st.session_state['annot_file']
             texto= ""
             if uploaded_file is not None:
                 print(uploaded_file) 
@@ -42,5 +45,12 @@ def run():
             
             
             ent_html= displacy.render(doc, style="ent", jupyter= False)
-            st.markdown(ent_html, unsafe_allow_html= True)
+
+            if tab1:
+                st.markdown(ent_html, unsafe_allow_html= True)
+                displacy.serve(doc, style="dep")
+            if tab2:
+                st.markdown(ent_html, unsafe_allow_html= True)
+                displacy.serve(doc, style="dep")
+                 
                 

@@ -25,11 +25,21 @@ from pathlib import Path
 def run():
     if not 'entities_colors' in st.session_state:
        st.info('You must add entities!')
-
-
+    
     option= 'Annotate'
+    df= pd.read_csv('file_logs.csv', usecols=['Filename', 'Status', 'Owner'])
+    df= df[df['Status'] == 'Pending']
+    print(df)
+    options= []
+    for index in df.index:
+        options.append(df.loc[index, 'Filename'])
+
+    sel= st.selectbox("Logged files", tuple(options), placeholder="Continue tagging your document")
+
     if option == 'Annotate':
-        uploaded_file= st.file_uploader("Choose a file")
+        uploaded_file= st.file_uploader("Choose a raw file")
+        
+        
         texto= ''
         if uploaded_file is None:
            if 'annot_file' in st.session_state:
@@ -38,7 +48,7 @@ def run():
             st.session_state['annot_file']= uploaded_file
     
         if uploaded_file is not None:
-            #print(uploaded_file) 
+             
             with tempfile.NamedTemporaryFile(delete=False) as tmp_file:
                 #st.markdown("# Original text file")
                 fp = Path(tmp_file.name)
@@ -126,13 +136,35 @@ def run():
                 menu_entities+= "],"
             
             menu_entities+= "},"
-            
-        
-
+      
         print(menu_entities)
+
+        leyenda= "<label for='entity-legend'> Check your document: </label>"
+        leyenda+= "<select name='entity-legend' id='leyenda' onclick='showLegend()' > "
+        leyenda+= "<option selected disabled>--Select one Entity or Field-- </option>"
+        for index in range(0, len(lista_entidades)):
+            leyenda+="""<optgroup label='entity' style="font-size:12px;">"""
+            entity= lista_entidades[index]
+            leyenda= leyenda.replace('entity', entity)
+            leyenda+= "<option value= 'without field' encolor='color-entidad'>without field</option>"
+            leyenda= leyenda.replace('color-entidad', lista_colores[index]) 
+
+            if entity in dict_entities.keys():
+                fields= dict_entities[entity].split(':')
+                
+                for field in fields:
+                    leyenda+= "<option value= 'pfield' encolor='color-entidad'>pfield</option>"
+                    leyenda= leyenda.replace('pfield', field)
+                    leyenda= leyenda.replace('color-entidad', lista_colores[index]) 
+
+            leyenda+= "</optgroup>"
+        leyenda+= "</select>"
+        leyenda+= """<input class="styled" style="margin-left:10px" type= "button" value="Highlight"  onclick="highlight()" />""" 
+        leyenda+= """<input class="styled" style="margin-left:5px" type= "button" value="Undo"  onclick="undo_highlight()" />""" 
+        print(leyenda)   
+
         html_string= '''
-        
-                        
+                      
         <script src="https://jsuites.net/v4/jsuites.js"></script>
         <link rel="stylesheet" href="https://jsuites.net/v4/jsuites.css" type="text/css" />
         <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Material+Icons">
@@ -140,7 +172,9 @@ def run():
         
         <div id='contextmenu' >
         </div>
-        
+        <script>
+            
+        </script>
 
         <script>
         
@@ -161,6 +195,7 @@ def run():
         }
 
         function select_entity(entity){
+           console.log(entity);
            alert(entity);
         }
 
@@ -168,7 +203,11 @@ def run():
 
          
         <style type="text/css">
+            
+            select, option{
+                background-color: lightblue;
 
+            }
             .center-block{
                 margin: auto;
                 display: block;
@@ -203,15 +242,16 @@ def run():
             
         </style>
         
-            
+        ''' + leyenda +'''<hr>
+
         <div  id="notepad" class="pre-wrap" >
         
             
             <p id="texto_anotacion" >''' + texto  +'''</p>
             <input type="hidden" id="actual-color" name="actual-color" value="orange" />
             <input type="hidden" id="actual-text" name="actual-text" value="" />
-            <input type="hidden" id="actual-entity" name="actual-entity" value="" />
-            <input type="hidden" id="actual-field" name="actual-field" value="" />
+            <input type="hidden" id="actual-entity" name="actual-entity" value="none" />
+            <input type="hidden" id="actual-field" name="actual-field" value="none" />
 
             <input type="hidden" id="last-startIndex" name="last-startIndex" value="" />
             <input type="hidden" id="last-endIndex" name="last-endIndex" value="" />
@@ -238,7 +278,60 @@ def run():
         var blob= new Blob([result.innerHTML], {type:'text/html'});
         saveAs(blob, 'result.html');
 
-        window.localStorage.setItem("string_HTML", html)
+        window.localStorage.setItem("string_HTML", html);
+    }
+    function undo_highlight(){
+    
+        console.log('Undo');
+        spans= document.getElementsByTagName("span");
+        for (let span of spans){
+            span.style.disabled= true;
+            entity= span.getAttribute('entity');
+            color= span.getAttribute('color');
+            if (entity !=  'none')
+               span.style.setProperty("background-color", color);
+            if (color == 'orange')
+                span.style.setProperty("background-color", color);
+        }
+    }
+    function showLegend(){
+    
+        var _selected= document.getElementById("leyenda");
+        console.log(_selected.selectedOptions[0]);
+        color= _selected.selectedOptions[0].getAttribute('encolor');
+        _selected.style.setProperty('background-color', color);
+    }
+
+    function highlight(){
+    
+        var _selected= document.getElementById("leyenda");
+        field= _selected.selectedOptions[0].value;
+        entity= _selected.selectedOptions[0].parentElement.label;
+        
+        if (field != 'without field'  ){
+            
+            spans= document.getElementsByTagName("span");
+            for (let span of spans){
+                span.style.disabled= true;
+                span_field= span.getAttribute('field');
+                
+                if (span_field !=  field)
+                    span.style.setProperty("background-color", "white");
+            }
+        }else{
+            spans= document.getElementsByTagName("span");
+            for (let span of spans){
+                span.style.disabled= true;
+                span_entity= span.getAttribute('entity');
+                span_field= span.getAttribute('field');
+
+                if (span_entity != entity)
+                    span.style.setProperty("background-color", "white");
+
+                if ((span_entity == entity) && (span_field != 'none'))
+                    span.style.setProperty("background-color", "white");           
+            }
+        }
     }
 
     function removeAll(){
@@ -251,8 +344,8 @@ def run():
             //console.log(span.style.getPropertyValue('background-color'));
             if (span.textContent == last_text){
                 span.style.setProperty('background-color', "white");
-                span.style.setProperty('entity', '');
-                span.style.setProperty('field', '');
+                span.style.setProperty('entity', 'none');
+                span.style.setProperty('field', 'none');
             }    
         }
     }
@@ -277,12 +370,14 @@ def run():
             if (span.textContent == last_text){
                 span.style.setProperty('background-color', color);
                 span.setAttribute('entity', entity);
+                span.setAttribute('color', color);
+
                 if (toggleField){
                    actual_field= document.getElementById('actual-field').value;
                    span.setAttribute('field', actual_field);
                    
                 }else
-                    span.setAttribute('field', '');
+                    span.setAttribute('field', 'none');
             }    
         }
         toggleField= false;
@@ -290,6 +385,7 @@ def run():
     function setField(field){
         //console.log(field);
         elem= document.getElementById("actual-field");
+        value= elem.getAttribute("")
         elem.setAttribute('value', field);
         toggleField= true;
     }
@@ -399,17 +495,16 @@ def run():
                 
         var elem;
         var actual_color;
-        
         elem= document.getElementById('actual-color');
         actual_color= elem.value;
         elem= document.getElementById('actual-entity');
-        last_entity= elem.value;
-
+        actual_entity= elem.value;
         elem= document.getElementById('actual-field');
-        last_field= elem.value;
+        actual_field= elem.value;
 
         selection= window.getSelection();
         cadena_texto= selection.toString();
+
         if (cadena_texto != ''){
 
             elem_actual_text= document.getElementById('actual-text');
@@ -425,52 +520,44 @@ def run():
             if (span_element.tagName == 'SPAN'){
                     
                     // <MARCADO>
-                    background_color= span_element.style.getPropertyValue('background-color');   
+                    background_color= span_element.style.getPropertyValue('background-color');  
+                     
                     if (background_color == 'white'){
                         span_element.style.setProperty('background-color', actual_color);
+                        span_element.setAttribute('entity', actual_entity);
+                        span_element.setAttribute('field', actual_field);
+                        span_element.setAttribute('color', actual_color);
                     } 
                     else{
                         span_element.style.setProperty('background-color', 'white');
-                    } 
-                    /*
-                    if (background_color != 'orange'){
-                        // <MARCADO DE ALGUNA ENTITY>  => <CAMBIAR ENTITY>
-                        span_element.remove();
-                        var span= document.createElement("span");
-                        span.style.setProperty('background-color', actual_color);
-                        span.style.setProperty('entity', last_entity);
-                        span.style.setProperty('field', last_field);
-
-                        span.appendChild(document.createTextNode(cadena_texto));
-                        range.insertNode(span);
-                    }else{
-                       // <MARCADO CON 'defaul-color'> => <DESMARCAR> 
-                        //selection.removeRange(range);
-                        span_element.style.setProperty('background-color', 'white');
-
+                        span_element.setAttribute('entity', 'none');
+                        span_element.setAttribute('field', 'none');
+                         span_element.setAttribute('color', white);
                     }
-                    */    
-          
-            }else{
+            }
+            else
+            {
                     // <NO MARCADO> => <MARCAR CON 'actual-color'>
-                    regex_word = new RegExp(cadena_texto, "g");
+                    regex_word = new RegExp(cadena_texto, "gi"); // Global and Case Insensitive Match
                     background_color = "background-color:"+actual_color;
                     let span= "<span style='"+background_color;
                     span+= "'";
-                    span+= " entity=" + "'" + last_entity + "'";
-                    span+= " field=" + "'" + last_field + "'";
+                    span+= " entity=" + "'" + actual_entity + "'";
+                    span+= " field=" + "'" + actual_field + "'";
+                    span+= " color=" + "'" + actual_color + "'";
 
-                    span+= ";>"+cadena_texto+"</span>";
-                    console.log(span);
+                    //span+= ";>"+cadena_texto+"</span>";
+                    span+= ";>$&</span>"; // Inserts the matched substring
+                    
                     window.getSelection().anchorNode.parentElement.innerHTML =
                     window.getSelection().anchorNode.parentElement.innerHTML.replace(regex_word, span)
-                    
-                    
+                    //const split= window.getSelection().anchorNode.parentElement.innerHTML.split(' ')                  
             }
 
         }
     }
-        
+
+    
         
     </script>
     
@@ -480,11 +567,12 @@ def run():
         
         if st.button("Log File Status"):
             if uploaded_file:
+                owner= st.session_state['name']
                 if os.path.getsize('file_logs.csv') != 0:
-                    df= pd.read_csv('file_logs.csv', usecols=['Filename', 'Status'])
-                    df.loc[len(df.index)]= [uploaded_file.name, 'Pending']
+                    df= pd.read_csv('file_logs.csv', usecols=['Filename', 'Status', 'Owner'])
+                    df.loc[len(df.index)]= [uploaded_file.name, 'Pending', owner]
                 else:
-                    df= pd.DataFrame([[uploaded_file.name, 'Pending']], columns= ['Filename', 'Status'])
+                    df= pd.DataFrame([[uploaded_file.name, 'Pending', owner]], columns= ['Filename', 'Status', 'Owner'])
                 print(df)
                 df.to_csv('file_logs.csv', encoding= 'utf-8', index= True)
                 st.session_state['file_logs']= df
