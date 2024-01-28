@@ -54,7 +54,7 @@ st.session_state['authenticator']= authenticator
 name= ''
 authentication_status= False
 username= ''
-name, authentication_status, username= authenticator.login("Login", "main")
+name, authentication_status, username= authenticator.login("main", 5)
 #set_background('./background.png')
 
 if authentication_status:
