@@ -50,6 +50,7 @@ authenticator = stauth.Authenticate(
    config['cookie']['expiry_days'],
    config['preauthorized']
 )
+st.session_state['authenticator']= authenticator
 name= ''
 authentication_status= False
 username= ''
@@ -59,9 +60,9 @@ name, authentication_status, username= authenticator.login("Login", "main")
 if authentication_status:
 
     authenticator.logout('Logout', 'sidebar')
-    st.cache_data.clear()
-    for key in st.session_state.keys():
-         del st.session_state[key]
+    #st.cache_data.clear()
+    #for key in st.session_state.keys():
+    #     del st.session_state[key]
 
     with st.sidebar:
         
