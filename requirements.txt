@@ -9,4 +9,4 @@ st-annotated-text
 st_click_detector
 beautifulsoup4
 spacy
-streamlit_authenticator==0.2.3
+streamlit_authenticator==0.3.1
