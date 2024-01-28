@@ -2,11 +2,11 @@ altair
 numpy
 pandas
 pydeck
-streamlit==1.30
+streamlit==1.29
 streamlit-option-menu
 matplotlib
 st-annotated-text
 st_click_detector
 beautifulsoup4
 spacy
-streamlit_authenticator==0.3.1
+streamlit_authenticator==0.2.3
