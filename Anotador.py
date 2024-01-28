@@ -60,12 +60,18 @@ name, authentication_status, username= authenticator.login("Login", "main")
 if authentication_status:
 
     authenticator.logout('Logout', 'sidebar')
-    #st.cache_data.clear()
-    #for key in st.session_state.keys():
-    #     del st.session_state[key]
-
+    
     with st.sidebar:
-        
+        columns= st.columns((1,1))
+        with columns[0]:
+            if st.button("Clear states", use_container_width=True):
+                for key in st.session_state.keys():
+                    del st.session_state[key]
+        with columns[1]:
+            if st.button("Clear cache", use_container_width=True):
+                st.cache_data.clear()
+                
+
         option= option_menu("Annotation Tool", ["Entities", "Annotate", "View Annotations", "NER", "File Logs", \
                                                 'Users', 'Statistics'], icons= ['gear', 'markdown', 'eye', \
                                                                                 'house-gear', 'filetype-csv', 'person', 'key'])
