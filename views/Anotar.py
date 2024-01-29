@@ -1,4 +1,3 @@
-
 #!/usr/bin/env python
 # coding: utf-8
 
@@ -314,8 +313,10 @@ def run():
             for (let span of spans){
                 span.style.disabled= true;
                 span_field= span.getAttribute('field');
+                span_second_field= span.getAttribute('second_field');
                 
-                if (span_field !=  field)
+                //if (span_field !=  field)
+                if ((span_field !=  field) && (span_second_field != field))
                     span.style.setProperty("background-color", "white");
             }
         }else{
@@ -324,6 +325,7 @@ def run():
                 span.style.disabled= true;
                 span_entity= span.getAttribute('entity');
                 span_field= span.getAttribute('field');
+                span_second_field= span.getAttribute('second_field');
 
                 if (span_entity != entity)
                     span.style.setProperty("background-color", "white");
@@ -346,6 +348,7 @@ def run():
                 span.style.setProperty('background-color', "white");
                 span.style.setProperty('entity', 'none');
                 span.style.setProperty('field', 'none');
+                span.style.setProperty('second_field', 'none');
             }    
         }
     }
@@ -374,10 +377,16 @@ def run():
 
                 if (toggleField){
                    actual_field= document.getElementById('actual-field').value;
-                   span.setAttribute('field', actual_field);
+                   if (span.getAttribute('field') == 'none')
+                     span.setAttribute('field', actual_field);
+                   else
+                        span.setAttribute('second_field', actual_field);
                    
-                }else
+                }else{
                     span.setAttribute('field', 'none');
+                    span.setAttribute('second_field', 'none');
+                    
+                }
             }    
         }
         toggleField= false;
