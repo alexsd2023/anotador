@@ -335,7 +335,10 @@ def run():
             }
         }
     }
-
+    function removeAccents(str){
+    //function removeAccents = (str) => {
+        return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "");  
+    }
     function removeAll(){
         console.log('Remove all');
 
@@ -500,6 +503,43 @@ def run():
  
     // FUNCION QUE HACE EL MARCADO VISUAL
   
+    function replaceAt(str, index, ch){
+        return str.replace(/./g, (c, i) => i == index ? ch : c);
+    }
+
+    function auxiliar(string){
+         
+        string= string.toLowerCase();
+        copia= string;
+
+        const result= [];
+        console.log(string.length);
+        for (var i=0 ; i< string.length; i++){ 
+         
+            if (string[i] == 'a'){
+              string= replaceAt(string, i, 'á');
+              result.push(string);
+            }
+            if (string[i] == 'e'){
+              string= replaceAt(string, i, 'é');
+              result.push(string);
+            }
+            if (string[i] == 'i'){
+              string= replaceAt(string, i, 'í');
+              result.push(string);
+            }
+            if (string[i] == 'o'){
+              string= replaceAt(string, i, 'ó');
+              result.push(string);
+            }
+            if (string[i] == 'u'){
+              string= replaceAt(string, i, 'ú');
+              result.push(string);
+            }
+            string= copia;
+        }
+        return result;
+    }
     function marcar_seleccion(){
                 
         var elem;
@@ -524,8 +564,7 @@ def run():
             focus_node= selection.focusNode;
             span_element= focus_node.parentElement;
             console.log(span_element);
-            
-            console.log(range);
+            //console.log(range);
             if (span_element.tagName == 'SPAN'){
                     
                     // <MARCADO>
@@ -547,7 +586,12 @@ def run():
             else
             {
                     // <NO MARCADO> => <MARCAR CON 'actual-color'>
-                    regex_word = new RegExp(cadena_texto, "gi"); // Global and Case Insensitive Match
+                    
+                    cleared= removeAccents(cadena_texto);
+                    
+                    //regex_word = new RegExp(cadena_texto, "gi"); // Global and Case Insensitive Match
+                    regex_word = new RegExp(cleared, "gi");
+
                     background_color = "background-color:"+actual_color;
                     let span= "<span style='"+background_color;
                     span+= "'";
@@ -560,7 +604,20 @@ def run():
                     
                     window.getSelection().anchorNode.parentElement.innerHTML =
                     window.getSelection().anchorNode.parentElement.innerHTML.replace(regex_word, span)
-                    //const split= window.getSelection().anchorNode.parentElement.innerHTML.split(' ')                  
+                    
+                    //const split= window.getSelection().anchorNode.parentElement.innerHTML.split(' ')
+
+                    console.log(cleared);
+                    cleared_all_accents= auxiliar(cleared); 
+                    parent= document.getElementById("texto_anotacion");
+                    for (var i= 0; i< cleared_all_accents.length; i++){
+                       word= cleared_all_accents[i];
+                       console.log(word); 
+                       regex_word = new RegExp(word, "gi"); 
+                       //window.getSelection().anchorNode.parentElement.innerHTML =
+                       //window.getSelection().anchorNode.parentElement.innerHTML.replace(regex_word, span)
+                       parent.innerHTML = parent.innerHTML.replace(regex_word, span);
+                    }
             }
 
         }
