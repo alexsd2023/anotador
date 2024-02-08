@@ -225,11 +225,11 @@ def run():
             }
             .jcontexthassubmenu > div{
                  padding: 2% !important;
-                 max-height: 110px !important;
+                 //max-height: 110px !important;
                  height: auto !important;
                  width: 160px !important;
                  overflow-x: hidden;
-                 overflow-y: auto;
+                 overflow-y: hidden;
             }
             .jcontextmenu > div:hover{
                 background-color: #9ebcf7;
@@ -347,18 +347,21 @@ def run():
         for (let span of spans){
             
             //console.log(span.style.getPropertyValue('background-color'));
-            if (span.textContent == last_text){
+            //if (removeAccents(span.textContent.toLower()) == removeAccents(last_text.toLower())){
+            if (removeAccents(span.textContent.toLowerCase()) == removeAccents(last_text.toLowerCase())){
                 span.style.setProperty('background-color', "white");
-                span.style.setProperty('entity', 'none');
-                span.style.setProperty('field', 'none');
-                span.style.setProperty('second_field', 'none');
+                span.setAttribute('entity', 'none');
+                span.setAttribute('field', 'none');
+                span.setAttribute('second_field', 'none');
             }    
         }
     }
     function setEntity(entity, color){
     
         console.log(entity, ':', color);
+        console.log("SELECCIONADO: ", entity);
         elem= document.getElementById("actual-entity");
+        
         elem.setAttribute('value', entity)
 
         elem= document.getElementById("actual-color");
@@ -373,9 +376,20 @@ def run():
         for (let span of spans){
             
             //console.log(span.style.getPropertyValue('background-color'));
-            if (span.textContent == last_text){
+            //if (removeAccents(span.textContent.lower()) == removeAccents(last_text.lower())){
+            str1= span.textContent.toLowerCase()
+            str2= last_text.toLowerCase()
+            str1= removeAccents(str1)
+            str2= removeAccents(str2)
+            if (str1 == str2){
                 span.style.setProperty('background-color', color);
+                entity_value= span.getAttribute('entity');
+
                 span.setAttribute('entity', entity);
+                if (entity != entity_value){
+                    span.setAttribute('field', 'none');
+                    span.setAttribute('second_field', 'none');
+                }
                 span.setAttribute('color', color);
 
                 if (toggleField){
@@ -393,9 +407,11 @@ def run():
             }    
         }
         toggleField= false;
+        elem= document.getElementById("actual-field");
+        elem.setAttribute('value', 'none');
     }
     function setField(field){
-        //console.log(field);
+        console.log("SELECCIONADO: ", field);
         elem= document.getElementById("actual-field");
         value= elem.getAttribute("")
         elem.setAttribute('value', field);
