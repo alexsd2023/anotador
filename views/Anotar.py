@@ -377,16 +377,23 @@ def run():
             
             //console.log(span.style.getPropertyValue('background-color'));
             //if (removeAccents(span.textContent.lower()) == removeAccents(last_text.lower())){
-            str1= span.textContent.toLowerCase()
-            str2= last_text.toLowerCase()
-            str1= removeAccents(str1)
-            str2= removeAccents(str2)
+            str1= span.textContent.toLowerCase();
+            str2= last_text.toLowerCase();
+            str1= removeAccents(str1);
+            str2= removeAccents(str2);
+            var entidad='';
+            var campo='';
+            
             if (str1 == str2){
                 span.style.setProperty('background-color', color);
                 entity_value= span.getAttribute('entity');
 
                 span.setAttribute('entity', entity);
+
                 if (entity != entity_value){
+                
+                // Se ha cambiado de entidad por lo que reseteo los fields
+
                     span.setAttribute('field', 'none');
                     span.setAttribute('second_field', 'none');
                 }
@@ -395,9 +402,9 @@ def run():
                 if (toggleField){
                    actual_field= document.getElementById('actual-field').value;
                    if (span.getAttribute('field') == 'none')
-                     span.setAttribute('field', actual_field);
+                      span.setAttribute('field', actual_field);
                    else
-                        span.setAttribute('second_field', actual_field);
+                      span.setAttribute('second_field', actual_field);
                    
                 }else{
                     span.setAttribute('field', 'none');
@@ -587,16 +594,23 @@ def run():
                     background_color= span_element.style.getPropertyValue('background-color');  
                      
                     if (background_color == 'white'){
+                    // Si no está marcada, entonces añado la entidad, color y field
                         span_element.style.setProperty('background-color', actual_color);
                         span_element.setAttribute('entity', actual_entity);
                         span_element.setAttribute('field', actual_field);
                         span_element.setAttribute('color', actual_color);
                     } 
                     else{
+                    //Ya estaba marcada, entonces la desmarco
                         span_element.style.setProperty('background-color', 'white');
                         span_element.setAttribute('entity', 'none');
                         span_element.setAttribute('field', 'none');
-                         span_element.setAttribute('color', white);
+                        span_element.setAttribute('second_field', 'none');
+                        span_element.setAttribute('color', white);
+
+                        span_element.setAttribute('second_entity', 'none');
+                        span_element.setAttribute('third_field', 'none');
+                        span_element.setAttribute('fourth_field', 'none');
                     }
             }
             else
