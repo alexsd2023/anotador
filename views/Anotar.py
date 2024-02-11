@@ -105,7 +105,7 @@ def run():
         
         menu_entities= "{title: 'Remove all', icon: 'delete', shortcut:'Ctrl + A',  onclick:function(){removeAll();}},"
         menu_entities+= "{title: 'Reload', icon: 'refresh', shortcut: 'Ctrl +  R', onclick:function(){reload();}},"
-        menu_entities+= "{title: 'Download ', shortcut:'Ctrl + D', icon: 'download', onclick:function(){download();}},"
+        menu_entities+= "{title: 'Download', shortcut:'Ctrl + D', icon: 'download', onclick:function(){download();}},"
         menu_entities+= "{type: 'line'},"
 
         for i in range(0, len(lista_entidades)):
@@ -458,7 +458,7 @@ def run():
                 console.log(option[0].textContent);
             
                 txtValue= option[0].textContent;
-                if (txtValue != 'Remove all')
+                if (txtValue != 'Remove all' && txtValue !='Reload' && txtValue != 'Download')
                     if (txtValue.toUpperCase().indexOf(filter) > -1) 
                         item.style.display = "";
                     else 
@@ -675,7 +675,7 @@ def run():
                 st.session_state['file_logs']= df
                 print('File saved')
 
-                
+
         components.html(html_string, height=1200, scrolling=True)
         
     
