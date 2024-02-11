@@ -138,7 +138,7 @@ def run():
       
         print(menu_entities)
 
-        leyenda= "<label for='entity-legend'> Check your document: </label>"
+        leyenda= """<label for='entity-legend' style='font-size:14'> Check your document: </label>"""
         leyenda+= "<select name='entity-legend' id='leyenda' onclick='showLegend()' > "
         leyenda+= "<option selected disabled>--Select one Entity or Field-- </option>"
         for index in range(0, len(lista_entidades)):
@@ -202,9 +202,24 @@ def run():
 
          
         <style type="text/css">
-            
+
+            input[type=button]{
+                background-color: lightblue;
+                border-radius: 8px;
+                padding: 5px 10px;
+                
+            }
+            input[type=button]:hover{
+                
+                box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
+                cursor: pointer;
+                font-size: 14px;
+                background-color: #f44336;
+            }
             select, option{
                 background-color: lightblue;
+                font-size: 14px;
+                padding: 5px 10px;
 
             }
             .center-block{
