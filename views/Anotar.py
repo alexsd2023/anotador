@@ -383,7 +383,7 @@ def run():
             str2= removeAccents(str2);
             var entidad='';
             var campo='';
-            
+
             if (str1 == str2){
                 span.style.setProperty('background-color', color);
                 entity_value= span.getAttribute('entity');
@@ -628,9 +628,10 @@ def run():
                     span+= " entity=" + "'" + actual_entity + "'";
                     span+= " field=" + "'" + actual_field + "'";
                     span+= " color=" + "'" + actual_color + "'";
+                    span+= " second_field='none'" ;
 
                     //span+= ";>"+cadena_texto+"</span>";
-                    span+= ";>$&</span>"; // Inserts the matched substring
+                    span+= ">$&</span>"; // Inserts the matched substring
                     
                     window.getSelection().anchorNode.parentElement.innerHTML =
                     window.getSelection().anchorNode.parentElement.innerHTML.replace(regex_word, span)
@@ -659,9 +660,9 @@ def run():
     
         '''
         
-        components.html(html_string, height=800, scrolling=True)
         
-        if st.button("Log File Status"):
+        
+        if st.button("Save & Log File Status"):
             if uploaded_file:
                 owner= st.session_state['name']
                 if os.path.getsize('file_logs.csv') != 0:
@@ -673,6 +674,9 @@ def run():
                 df.to_csv('file_logs.csv', encoding= 'utf-8', index= True)
                 st.session_state['file_logs']= df
                 print('File saved')
+
+                
+        components.html(html_string, height=1200, scrolling=True)
         
     
     
