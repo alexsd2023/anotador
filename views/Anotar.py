@@ -368,13 +368,16 @@ def run():
                 span.setAttribute('entity', 'none');
                 span.setAttribute('field', 'none');
                 span.setAttribute('second_field', 'none');
+
+                span.setAttribute('second_entity', 'none');
+                span.setAttribute('third_field', 'none');
+                span.setAttribute('fourth_field', 'none');
             }    
         }
     }
     function setEntity(entity, color){
     
-        console.log(entity, ':', color);
-        console.log("SELECCIONADO: ", entity);
+        
         elem= document.getElementById("actual-entity");
         
         elem.setAttribute('value', entity)
@@ -385,13 +388,19 @@ def run():
         last_text= document.getElementById('actual-text').value;
         regex_word = new RegExp(last_text,"g");
         let span= "<span style='"+color+"';>"+last_text+"</span>";
-        //console.log(document.getElementById('text'));
         
         spans= document.getElementsByTagName("span");
+
+        if (toggleField)
+            actual_field= document.getElementById('actual-field').value;
+        else
+            actual_field= 'none';
+
+        console.log("ACTUAL ENTITY: ", entity);
+        console.log("ACTUAL FIELD: ", actual_field);
+
         for (let span of spans){
             
-            //console.log(span.style.getPropertyValue('background-color'));
-            //if (removeAccents(span.textContent.lower()) == removeAccents(last_text.lower())){
             str1= span.textContent.toLowerCase();
             str2= last_text.toLowerCase();
             str1= removeAccents(str1);
@@ -401,30 +410,43 @@ def run():
 
             if (str1 == str2){
                 span.style.setProperty('background-color', color);
-                entity_value= span.getAttribute('entity');
-
-                span.setAttribute('entity', entity);
-
-                if (entity != entity_value){
+                span.setAttribute('color', color);  
+                entity1= span.getAttribute('entity');
+                entity2= span.getAttribute('second_entity');
                 
-                // Se ha cambiado de entidad por lo que reseteo los fields
-
-                    span.setAttribute('field', 'none');
+                if (entity1 == 'none'){
+                
+                    span.setAttribute('entity', entity);
+                    span.setAttribute('field', actual_field);
                     span.setAttribute('second_field', 'none');
+
                 }
-                span.setAttribute('color', color);
+                else
+                {
+                   if (entity1 == entity){ 
+                      if (field == 'none'){
+                         
+                         span.setAttribute('field', actual_field);
+                         span.setAttribute('second_field', 'none');
 
-                if (toggleField){
-                   actual_field= document.getElementById('actual-field').value;
-                   if (span.getAttribute('field') == 'none')
-                      span.setAttribute('field', actual_field);
-                   else
-                      span.setAttribute('second_field', actual_field);
-                   
-                }else{
-                    span.setAttribute('field', 'none');
-                    span.setAttribute('second_field', 'none');
-                    
+                      }
+                      else
+                         span.setAttribute('second_field', actual_field);
+                    }else
+                      if (entity2 == 'none'){
+                         span.setAttribute('second_entity', entity);
+                         span.setAttribute('third_field', actual_field);
+                         span.setAttribute('fourth_field', 'none');
+                      }
+                      else
+                        if (entity2 == entity){
+                            if (third_field == 'none'){
+                                span.setAttribute('third_field', actual_field);
+                                span.setAttribute('fourth_field', 'none');
+                            }
+                            else
+                                span.setAttribute('fourth_field', actual_field);
+                        }
                 }
             }    
         }
@@ -433,7 +455,7 @@ def run():
         elem.setAttribute('value', 'none');
     }
     function setField(field){
-        console.log("SELECCIONADO: ", field);
+        
         elem= document.getElementById("actual-field");
         value= elem.getAttribute("")
         elem.setAttribute('value', field);
@@ -614,6 +636,10 @@ def run():
                         span_element.setAttribute('entity', actual_entity);
                         span_element.setAttribute('field', actual_field);
                         span_element.setAttribute('color', actual_color);
+
+                        span_element.setAttribute('second_entity', 'none');
+                        span_element.setAttribute('third_field', 'none');
+                        span_element.setAttribute('fourth_field', 'none');
                     } 
                     else{
                     //Ya estaba marcada, entonces la desmarco
@@ -644,6 +670,10 @@ def run():
                     span+= " field=" + "'" + actual_field + "'";
                     span+= " color=" + "'" + actual_color + "'";
                     span+= " second_field='none'" ;
+
+                    span+= " second_entity='none'" ;
+                    span+= " third_field='none'" ;
+                    span+= " fourth_field='none'" ;
 
                     //span+= ";>"+cadena_texto+"</span>";
                     span+= ">$&</span>"; // Inserts the matched substring
