@@ -352,7 +352,13 @@ def run():
     }
     function removeAccents(str){
     //function removeAccents = (str) => {
-        return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "");  
+        result= str.normalize("NFD").replace(/[\u0300-\u036f]/g, "");  
+        for (var i= 0; i< str.length; i++)
+            if (str.charAt(i) == 'ñ')
+                result= result.substring(0,i) + 'ñ' + result.substring(i+1);
+            if (str.charAt(i) == 'Ñ')
+                result= result.substring(0,i) + 'Ñ' + result.substring(i+1);
+        return result;
     }
     function removeAll(){
         console.log('Remove all');
@@ -659,6 +665,7 @@ def run():
                     // <NO MARCADO> => <MARCAR CON 'actual-color'>
                     
                     cleared= removeAccents(cadena_texto);
+                    console.log(cleared);
                     
                     //regex_word = new RegExp(cadena_texto, "gi"); // Global and Case Insensitive Match
                     regex_word = new RegExp(cleared, "gi");
