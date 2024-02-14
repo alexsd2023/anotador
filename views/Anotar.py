@@ -713,20 +713,24 @@ def run():
         '''
         
         
-        
-        if st.button("Save & Log File Status"):
-            if uploaded_file:
-                owner= st.session_state['name']
-                if os.path.getsize('file_logs.csv') != 0:
-                    df= pd.read_csv('file_logs.csv', usecols=['Filename', 'Status', 'Owner'])
-                    df.loc[len(df.index)]= [uploaded_file.name, 'Pending', owner]
-                else:
-                    df= pd.DataFrame([[uploaded_file.name, 'Pending', owner]], columns= ['Filename', 'Status', 'Owner'])
-                print(df)
-                df.to_csv('file_logs.csv', encoding= 'utf-8', index= True)
-                st.session_state['file_logs']= df
-                print('File saved')
-
+        col1 ,col2= st.columns([1, 4])
+        with col1:
+            if st.button("Save & Log File"):
+                if uploaded_file:
+                    owner= st.session_state['name']
+                    if os.path.getsize('file_logs.csv') != 0:
+                        df= pd.read_csv('file_logs.csv', usecols=['Filename', 'Status', 'Owner'])
+                        df.loc[len(df.index)]= [uploaded_file.name, 'Pending', owner]
+                    else:
+                        df= pd.DataFrame([[uploaded_file.name, 'Pending', owner]], columns= ['Filename', 'Status', 'Owner'])
+                    print(df)
+                    df.to_csv('file_logs.csv', encoding= 'utf-8', index= True)
+                    st.session_state['file_logs']= df
+                    print('File saved')
+        with col2:
+           if  st.button('Clear text', help="If loaded, the press in :negative_squared_cross_mark:") and 'annot_file' in st.session_state:
+               del st.session_state['annot_file']
+               
 
         components.html(html_string, height=1200, scrolling=True)
         
