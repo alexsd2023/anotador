@@ -392,7 +392,7 @@ def run():
         elem.setAttribute('value', color)
 
         last_text= document.getElementById('actual-text').value;
-        regex_word = new RegExp(last_text,"g");
+        regex_word = new RegExp("\\\\b"+last_text+"\\\\b","g");
         let span= "<span style='"+color+"';>"+last_text+"</span>";
         
         spans= document.getElementsByTagName("span");
@@ -471,7 +471,7 @@ def run():
     function clear_entities(){
 
         last_text= document.getElementById('actual-text').value;
-        regex_word = new RegExp(last_text,"g");
+        regex_word = new RegExp("\\\\b"+last_text+"\\\\b","g");
         
         spans= document.getElementsByTagName("span");
         for (let span of spans){
@@ -606,6 +606,7 @@ def run():
         }
         return result;
     }
+    
     function marcar_seleccion(){
                 
         var elem;
@@ -668,7 +669,15 @@ def run():
                     console.log(cleared);
                     
                     //regex_word = new RegExp(cadena_texto, "gi"); // Global and Case Insensitive Match
-                    regex_word = new RegExp(cleared, "gi");
+
+                    
+                    modificador= "[^A-Za-záéíóú]"
+                    modificador= "[^áéíóú]"
+                    
+                    regex_word = new RegExp("\\\\b"+cleared+"\\\\b", "gi");
+                    console.log("\\\\")
+
+                    console.log('Regular Expression: ', regex_word)
 
                     background_color = "background-color:"+actual_color;
                     let span= "<span style='"+background_color;
@@ -696,9 +705,11 @@ def run():
                     for (var i= 0; i< cleared_all_accents.length; i++){
                        word= cleared_all_accents[i];
                        console.log(word); 
-                       regex_word = new RegExp(word, "gi"); 
-                       //window.getSelection().anchorNode.parentElement.innerHTML =
-                       //window.getSelection().anchorNode.parentElement.innerHTML.replace(regex_word, span)
+                       
+                       
+                       regex_word = new RegExp("\\\\b"+word+"\\\\b", "gi"); 
+                       console.log(regex_word)
+
                        parent.innerHTML = parent.innerHTML.replace(regex_word, span);
                     }
             }
@@ -708,9 +719,9 @@ def run():
 
     
         
-    </script>
+    </script> '''
     
-        '''
+        
         
         
         col1 ,col2= st.columns([1, 4])
@@ -730,7 +741,7 @@ def run():
         with col2:
            if  st.button('Clear text', help="If loaded, the press in :negative_squared_cross_mark:") and 'annot_file' in st.session_state:
                del st.session_state['annot_file']
-               
+               html_string=""
 
         components.html(html_string, height=1200, scrolling=True)
         
