@@ -367,19 +367,32 @@ def run():
         spans= document.getElementsByTagName("span");
         for (let span of spans){
             
-            //console.log(span.style.getPropertyValue('background-color'));
-            //if (removeAccents(span.textContent.toLower()) == removeAccents(last_text.toLower())){
+            span_text= span.textContent;
+            
             if (removeAccents(span.textContent.toLowerCase()) == removeAccents(last_text.toLowerCase())){
-                span.style.setProperty('background-color', "white");
+               span.style.setProperty('background-color', "white");
                 span.setAttribute('entity', 'none');
-                span.setAttribute('field', 'none');
+               span.setAttribute('field', 'none');
                 span.setAttribute('second_field', 'none');
 
                 span.setAttribute('second_entity', 'none');
                 span.setAttribute('third_field', 'none');
                 span.setAttribute('fourth_field', 'none');
             }    
+
+            //span.parentNode.replaceChild(document.createTextNode(span_text), span);
+            
         }
+        spans= $("span[entity |= 'none']");
+        
+        $.each(spans, function(index, value){
+            console.log(index);
+            //console.log(value);
+            parentNode= value.parentNode;
+            if (removeAccents(value.textContent.toLowerCase()) == removeAccents(last_text.toLowerCase())) 
+                value.replaceWith(document.createTextNode(value.textContent));
+
+        });
     }
     function setEntity(entity, color){
     
@@ -654,7 +667,7 @@ def run():
                         span_element.setAttribute('entity', 'none');
                         span_element.setAttribute('field', 'none');
                         span_element.setAttribute('second_field', 'none');
-                        span_element.setAttribute('color', white);
+                        span_element.setAttribute('color', 'white');
 
                         span_element.setAttribute('second_entity', 'none');
                         span_element.setAttribute('third_field', 'none');
