@@ -429,6 +429,9 @@ def run():
 
             if (str1 == str2){
                 span.style.setProperty('background-color', color);
+                span.style.setProperty('borderColor', color);
+                previous_color= span.getAttribute('color');
+                
                 span.setAttribute('color', color);  
                 entity1= span.getAttribute('entity');
                 entity2= span.getAttribute('second_entity');
@@ -438,7 +441,7 @@ def run():
                     span.setAttribute('entity', entity);
                     span.setAttribute('field', actual_field);
                     span.setAttribute('second_field', 'none');
-
+                    
                 }
                 else
                 {
@@ -447,7 +450,7 @@ def run():
                          
                          span.setAttribute('field', actual_field);
                          span.setAttribute('second_field', 'none');
-
+                            
                       }
                       else
                          span.setAttribute('second_field', actual_field);
@@ -456,6 +459,7 @@ def run():
                          span.setAttribute('second_entity', entity);
                          span.setAttribute('third_field', actual_field);
                          span.setAttribute('fourth_field', 'none');
+                         span.style.setProperty('border', "3px solid "+previous_color);
                       }
                       else
                         if (entity2 == entity){
@@ -619,11 +623,40 @@ def run():
         }
         return result;
     }
-    
+    var teclaPresionada = false;
+
+    document.addEventListener("keypress", function (e) {
+        
+        if(!teclaPresionada && e.code == 'KeyS'){
+            console.log("Tecla Presionada");
+            teclaPresionada = true;
+            console.log(e.code);
+        }
+    });
+
+    document.addEventListener("keyup", function (e) {
+        if(teclaPresionada && e.code == 'KeyS'){
+            console.log("Tecla Liberada");
+            teclaPresionada = false;
+        }
+    });
+
+
     function marcar_seleccion(){
                 
         var elem;
         var actual_color;
+
+        if (teclaPresionada){
+           elem= document.getElementById('actual-entity');
+           elem.setAttribute('value', 'none')
+           elem= document.getElementById('actual-field');
+           elem.setAttribute('value', 'none');
+           elem= document.getElementById('actual-color');
+           elem.setAttribute('value', 'orange');
+
+        }
+
         elem= document.getElementById('actual-color');
         actual_color= elem.value;
         elem= document.getElementById('actual-entity');
