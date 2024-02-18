@@ -5,11 +5,14 @@ import streamlit as st
 import base64
 from streamlit_option_menu import option_menu
 from views import Entities, Annotate, ViewAnnotations, NER, FileLogs, Anotar, Statistics, Users
-
+#from streamlit_extras.app_logo import add_logo
 import streamlit_authenticator as stauth
 import pickle
 st.set_page_config(layout="centered", page_title="Annotation Tool",  menu_items={'About':"Lancaster Annotation Tool. All copyrights reserved"})
 
+#add_logo("https://www.lancaster.ac.uk/media/wdp/style-assets/images/logos/lu-logo.svg")
+with st.sidebar:
+    st.image("https://www.lancaster.ac.uk/media/wdp/style-assets/images/logos/lu-logo.svg", width=150)
 import yaml
 from yaml.loader import SafeLoader
 with open('./credentials.yaml') as file:
