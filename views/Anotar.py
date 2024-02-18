@@ -672,6 +672,9 @@ def run():
                         span_element.setAttribute('second_entity', 'none');
                         span_element.setAttribute('third_field', 'none');
                         span_element.setAttribute('fourth_field', 'none');
+
+                        span_text= span_element.textContent;
+                        //span_element.replaceWith(document.createTextNode(span_text));
                     }
             }
             else
@@ -726,6 +729,16 @@ def run():
                        parent.innerHTML = parent.innerHTML.replace(regex_word, span);
                     }
             }
+            //Borrar etiques vacías
+            spans= $("span[entity |= 'none']");
+            $.each(spans, function(index, value){
+                parentNode= value.parentNode;
+                console.log(parentNode)
+                if (value.style.getPropertyValue("background-color") == 'white'){
+                    console.log('Borrado White Span');
+                    value.replaceWith(document.createTextNode(value.textContent));}
+
+        });
 
         }
     }
