@@ -13,7 +13,7 @@ st.set_page_config(layout="centered", page_title="Annotation Tool",  menu_items=
 #add_logo("https://www.lancaster.ac.uk/media/wdp/style-assets/images/logos/lu-logo.svg")
 with st.sidebar:
     #st.image("https://www.lancaster.ac.uk/media/wdp/style-assets/images/logos/lu-logo.svg", width=150)
-    st.image("https://github.com/alexsd2023/anotador/blob/main/logo.png", width=150)
+    st.image("./logo.png", width=150)
     
 import yaml
 from yaml.loader import SafeLoader
