@@ -715,16 +715,18 @@ def run():
                     // <NO MARCADO> => <MARCAR CON 'actual-color'>
                     
                     cleared= removeAccents(cadena_texto);
-                    console.log(cleared);
-                    
-                    //regex_word = new RegExp(cadena_texto, "gi"); // Global and Case Insensitive Match
+                    console.log("Cleared: ", cleared);
+                    console.log("Cadena de texto: ", cadena_texto);
 
-                    
                     modificador= "[^A-Za-záéíóú]"
                     modificador= "[^áéíóú]"
                     
-                    regex_word = new RegExp("\\\\b"+cleared+"\\\\b", "gi");
-                    console.log("\\\\")
+                    palabras= cadena_texto.split(" ");
+                    console.log(palabras);
+                    if (palabras.length == 1)
+                      regex_word = new RegExp("\\\\b"+cleared+"\\\\b", "gi");
+                    else
+                      regex_word = new RegExp("\\\\b"+cadena_texto+"\\\\b", "gi"); // Global and Case Insensitive Match
 
                     console.log('Regular Expression: ', regex_word)
 
@@ -745,28 +747,20 @@ def run():
                     
                     window.getSelection().anchorNode.parentElement.innerHTML =
                     window.getSelection().anchorNode.parentElement.innerHTML.replace(regex_word, span)
-                    
-                    //const split= window.getSelection().anchorNode.parentElement.innerHTML.split(' ')
-
-                    console.log(cleared);
+                
                     cleared_all_accents= auxiliar(cleared); 
                     parent= document.getElementById("texto_anotacion");
                     for (var i= 0; i< cleared_all_accents.length; i++){
-                       word= cleared_all_accents[i];
-                       console.log(word); 
-                       
-                       
-                       regex_word = new RegExp("\\\\b"+word+"\\\\b", "gi"); 
-                       console.log(regex_word)
-
-                       parent.innerHTML = parent.innerHTML.replace(regex_word, span);
+                        word= cleared_all_accents[i]; 
+                        regex_word = new RegExp("\\\\b"+word+"\\\\b", "gi"); 
+                        parent.innerHTML = parent.innerHTML.replace(regex_word, span);
                     }
             }
             //Borrar etiques vacías
             spans= $("span[entity |= 'none']");
             $.each(spans, function(index, value){
                 parentNode= value.parentNode;
-                console.log(parentNode)
+                
                 if (value.style.getPropertyValue("background-color") == 'white'){
                     console.log('Borrado White Span');
                     value.replaceWith(document.createTextNode(value.textContent));}
