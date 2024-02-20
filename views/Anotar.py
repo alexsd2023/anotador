@@ -159,7 +159,7 @@ def run():
             leyenda+= "</optgroup>"
         leyenda+= "</select>"
         leyenda+= """<input class="styled" style="margin-left:10px" type= "button" value="Highlight"  onclick="highlight()" />""" 
-        leyenda+= """<input class="styled" style="margin-left:5px" type= "button" value="Undo"  onclick="undo_highlight()" />""" 
+        leyenda+= """<input class="styled" style="margin-left:5px" type= "button" value="Resume"  onclick="undo_highlight()" />""" 
         print(leyenda)   
 
         html_string= '''
@@ -302,8 +302,11 @@ def run():
             span.style.disabled= true;
             entity= span.getAttribute('entity');
             color= span.getAttribute('color');
-            if (entity !=  'none')
+            second_color= span.getAttribute('second_color');
+            if (entity !=  'none'){
                span.style.setProperty("background-color", color);
+               span.style.setProperty('border', "3px solid "+second_color);
+            }
             if (color == 'orange')
                 span.style.setProperty("background-color", color);
         }
@@ -329,10 +332,28 @@ def run():
                 span.style.disabled= true;
                 span_field= span.getAttribute('field');
                 span_second_field= span.getAttribute('second_field');
-                
-                //if (span_field !=  field)
-                if ((span_field !=  field) && (span_second_field != field))
-                    span.style.setProperty("background-color", "white");
+                span_third_field= span.getAttribute('third_field');
+                span_fourth_field= span.getAttribute('fourth_field');
+                span_entity= span.getAttribute('entity');
+                span_second_entity= span.getAttribute('second_entity');
+
+                if (span_entity != entity && span_second_entity != entity){
+                   span.style.setProperty("background-color", "white");
+                   span.style.setProperty('border', "3px solid white");
+                   }
+                else
+                    if (span_entity == entity && span_second_entity != entity){
+                        if (span_field !=  field && span_second_field != field){
+                            span.style.setProperty("background-color", "white");
+                            span.style.setProperty('border', "3px solid white");
+                        }
+                    }
+                    else{
+                        if (span_third_field !=  field && span_fourth_field != field){
+                             span.style.setProperty("background-color", "white");
+                             span.style.setProperty('border', "3px solid white");
+                        }
+                    }       
             }
         }else{
             spans= document.getElementsByTagName("span");
@@ -341,12 +362,27 @@ def run():
                 span_entity= span.getAttribute('entity');
                 span_field= span.getAttribute('field');
                 span_second_field= span.getAttribute('second_field');
+                span_third_field= span.getAttribute('third_field');
+                span_fourth_field= span.getAttribute('fourth_field');
+                span_second_entity= span.getAttribute('second_entity');
 
-                if (span_entity != entity)
+                if (span_entity != entity && span_second_entity != entity){
                     span.style.setProperty("background-color", "white");
-
-                if ((span_entity == entity) && (span_field != 'none'))
-                    span.style.setProperty("background-color", "white");           
+                    span.style.setProperty('border', "3px solid white"); 
+                    }   
+                else    
+                    if (span_entity == entity && span_second_entity != entity){
+                        if (span_field !=  'none' || span_second_field != 'none'){
+                             span.style.setProperty("background-color", "white"); 
+                             span.style.setProperty('border', "3px solid white");
+                        }        
+                    }  
+                    else{
+                        if (span_third_field !=  'none' && span_fourth_field != 'none'){
+                             span.style.setProperty("background-color", "white");
+                             span.style.setProperty('border', "3px solid white");
+                        }       
+                    }          
             }
         }
     }
@@ -459,6 +495,7 @@ def run():
                          span.setAttribute('second_entity', entity);
                          span.setAttribute('third_field', actual_field);
                          span.setAttribute('fourth_field', 'none');
+                         span.setAttribute('second_color', previous_color);
                          span.style.setProperty('border', "3px solid "+previous_color);
                       }
                       else
@@ -693,6 +730,7 @@ def run():
                         span_element.setAttribute('second_entity', 'none');
                         span_element.setAttribute('third_field', 'none');
                         span_element.setAttribute('fourth_field', 'none');
+                        span_element.setAttribute('second_color', 'white');
                     } 
                     else{
                     //Ya estaba marcada, entonces la desmarco
@@ -701,6 +739,7 @@ def run():
                         span_element.setAttribute('field', 'none');
                         span_element.setAttribute('second_field', 'none');
                         span_element.setAttribute('color', 'white');
+                        span_element.setAttribute('second_color', 'white');
 
                         span_element.setAttribute('second_entity', 'none');
                         span_element.setAttribute('third_field', 'none');
@@ -741,6 +780,7 @@ def run():
                     span+= " second_entity='none'" ;
                     span+= " third_field='none'" ;
                     span+= " fourth_field='none'" ;
+                    span+= " second_color='white'" ;
 
                     //span+= ";>"+cadena_texto+"</span>";
                     span+= ">$&</span>"; // Inserts the matched substring
