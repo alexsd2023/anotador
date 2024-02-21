@@ -703,6 +703,7 @@ def run():
 
         selection= window.getSelection();
         cadena_texto= selection.toString();
+        cadena_texto= cadena_texto.trim();
 
         if (cadena_texto != ''){
 
