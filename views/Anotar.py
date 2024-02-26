@@ -511,8 +511,8 @@ def run():
             }    
         }
         toggleField= false;
-        elem= document.getElementById("actual-field");
-        elem.setAttribute('value', 'none');
+        //elem= document.getElementById("actual-field");
+        //elem.setAttribute('value', 'none');
     }
     function setField(field){
         
