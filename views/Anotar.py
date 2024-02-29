@@ -435,9 +435,7 @@ def run():
     
         
         elem= document.getElementById("actual-entity");
-        
         elem.setAttribute('value', entity)
-
         elem= document.getElementById("actual-color");
         elem.setAttribute('value', color)
 
@@ -445,7 +443,6 @@ def run():
         //regex_word = new RegExp("\\\\b"+last_text+"\\\\b","g");
         //let span= "<span style='"+color+"';>"+last_text+"</span>";
         
-
         if (teclaPresionadaU)
             spans= $("span[entity |= 'none']");
         else
@@ -511,6 +508,12 @@ def run():
                             }
                             else
                                 span.setAttribute('fourth_field', actual_field);
+                        }else{ // Sobre-escribir la 2da entidad
+                            span.setAttribute('second_entity', entity);
+                            span.setAttribute('third_field', actual_field);
+                            span.setAttribute('fourth_field', 'none');
+                            span.setAttribute('second_color', previous_color);
+                            span.style.setProperty('border', "3px solid "+previous_color);
                         }
                 }
             }    
@@ -723,21 +726,33 @@ def run():
                 fourth_field= value.getAttribute('fourth_field');
 
                 console.log("Span entity: ", entity);
+                //value.addEventListener("mouseover", function(event){
+                //                        spanMouseOver(entity, field, second_field, 
+                //                        second_entity, third_field, fourth_field, event)
+                //                        }, false);
+
                 value.addEventListener("mouseover", function(event){
-                                        spanMouseOver(entity, field, second_field, 
-                                        second_entity, third_field, fourth_field, event)
+                                        spanMouseOver(this, event)
                                         }, false);
                                         
             });
         }
     }
-    function spanMouseOver(entity, field, second_field, second_entity, 
-                           third_field, fourth_field, event){
+    //function spanMouseOver(entity, field, second_field, second_entity, 
+    //                       third_field, fourth_field, event){
+    function spanMouseOver(value, event){
         checkbox= document.getElementById("mark-inline")
         left= event.clientX-80 + "px";
         tope= event.clientY + "px";
         //console.log("LEFT: ",  left);
         //console.log("TOP: ", tope);
+
+        entity= value.getAttribute('entity');
+        field= value.getAttribute('field');
+        second_field= value.getAttribute('second_field');       
+        second_entity= value.getAttribute('second_entity');
+        third_field= value.getAttribute('third_field');
+        fourth_field= value.getAttribute('fourth_field');
 
         if (checkbox.checked){
             
