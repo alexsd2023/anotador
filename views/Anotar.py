@@ -160,6 +160,7 @@ def run():
         leyenda+= "</select>"
         leyenda+= """<input class="styled" style="margin-left:10px" type= "button" value="Highlight"  onclick="highlight()" />""" 
         leyenda+= """<input class="styled" style="margin-left:5px" type= "button" value="Resume"  onclick="undo_highlight()" />""" 
+        leyenda+= """<br><br><input type="checkbox" id="mark-inline" name="mark-inline" onchange="toggleMarkinline(this)"/><label for="mark-inline"> -- Toggle Entities/Fields Inline --</label>"""
         print(leyenda)   
 
         html_string= '''
@@ -175,7 +176,7 @@ def run():
             
         </script>
 
-        <script>
+        <script>00
         
         var contextMenu = jSuites.contextmenu(document.getElementById('contextmenu'), {
             items:['''+menu_entities+'''],
@@ -441,10 +442,14 @@ def run():
         elem.setAttribute('value', color)
 
         last_text= document.getElementById('actual-text').value;
-        regex_word = new RegExp("\\\\b"+last_text+"\\\\b","g");
-        let span= "<span style='"+color+"';>"+last_text+"</span>";
+        //regex_word = new RegExp("\\\\b"+last_text+"\\\\b","g");
+        //let span= "<span style='"+color+"';>"+last_text+"</span>";
         
-        spans= document.getElementsByTagName("span");
+
+        if (teclaPresionadaU)
+            spans= $("span[entity |= 'none']");
+        else
+            spans= document.getElementsByTagName("span");
 
         if (toggleField)
             actual_field= document.getElementById('actual-field').value;
@@ -567,7 +572,7 @@ def run():
     }
     </script>
 
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js">
     
         
     </script>    
@@ -660,31 +665,112 @@ def run():
         }
         return result;
     }
-    var teclaPresionada = false;
+    var teclaPresionadaS = false;
+    var teclaPresionadaU = false;
 
     document.addEventListener("keypress", function (e) {
         
-        if(!teclaPresionada && e.code == 'KeyS'){
+        if(!teclaPresionadaS && e.code == 'KeyS'){
             console.log("Tecla Presionada");
-            teclaPresionada = true;
+            teclaPresionadaS = true;
+            console.log(e.code);
+        }
+        if(!teclaPresionadaU && e.code == 'KeyU'){
+            console.log("Tecla Presionada");
+            teclaPresionadaU = true;
             console.log(e.code);
         }
     });
 
     document.addEventListener("keyup", function (e) {
-        if(teclaPresionada && e.code == 'KeyS'){
+        if(teclaPresionadaS && e.code == 'KeyS'){
             console.log("Tecla Liberada");
-            teclaPresionada = false;
+            teclaPresionadaS = false;
+        }
+        if(teclaPresionadaU && e.code == 'KeyU'){
+            console.log("Tecla Liberada");
+            teclaPresionadaU = false;
         }
     });
 
+    function eliminar_span_anidados(){
+    
+            //Borrar etiques vacías
+            // node.replaceChild(newnode, oldnode)
+            spans= $("span");
+            $.each(spans, function(index, value){
+                //parentNode= value.parentNode;
+                //value.replaceWith(document.createTextNode(value.textContent));
+                var text = value.textContent;
+                if (value.firstChild.tagName == 'SPAN')
+                    value.parentNode.replaceChild(value.firstChild, value);  
+            });
+    }
 
+    function toggleMarkinline(element){
+        spans= $("span[entity]");
+        var entity;
+        var field;
+        if (element.checked){
+            $.each(spans, function(index, value){
+                
+                entity= value.getAttribute('entity');
+                field= value.getAttribute('field');
+                console.log("Span entity: ", entity);
+                value.addEventListener("mouseover", function(event){
+                                        spanMouseOver(entity, field, event)
+                                        }, false);
+                                        
+            });
+        }
+    }
+    function spanMouseOver(entity, field, event){
+        checkbox= document.getElementById("mark-inline")
+        left= event.clientX-80 + "px";
+        tope= event.clientY + "px";
+        //console.log("LEFT: ",  left);
+        //console.log("TOP: ", tope);
+
+        if (checkbox.checked){
+            
+            var modal= document.getElementById("myModal");
+            modal.style.top= tope;
+            modal.style.left= left;
+            modal.style.display= "block";
+            texto_modal= document.getElementById("texto-modal");
+            texto_modal.innerText= "Entity: "+ entity+" Field: "+field;
+
+        }
+
+    };
+    
+    function marcado_simple(actual_entity, actual_field, actual_color){
+       if (window.ActiveXObject){
+            var c= document.selection.createRange();
+            return c.htmlText
+       }
+       var span= document.createElement("span");
+       span.style.setProperty('background-color', actual_color);
+       span.setAttribute('entity', actual_entity);
+       span.setAttribute('field', actual_field);
+       span.setAttribute('color', actual_color);
+
+       span.setAttribute('second_entity', 'none');
+       span.setAttribute('third_field', 'none');
+       span.setAttribute('fourth_field', 'none');
+       span.setAttribute('second_color', 'white'); 
+
+       var w= getSelection().getRangeAt(0);
+       w.surroundContents(span);
+       return span.innerHTML;
+    }
     function marcar_seleccion(){
                 
         var elem;
         var actual_color;
+        var regexparams= 'gi';
 
-        if (teclaPresionada){
+        if (teclaPresionadaS){
            elem= document.getElementById('actual-entity');
            elem.setAttribute('value', 'none')
            elem= document.getElementById('actual-field');
@@ -693,7 +779,7 @@ def run():
            elem.setAttribute('value', 'orange');
 
         }
-
+        
         elem= document.getElementById('actual-color');
         actual_color= elem.value;
         elem= document.getElementById('actual-entity');
@@ -705,6 +791,25 @@ def run():
         cadena_texto= selection.toString();
         cadena_texto= cadena_texto.trim();
 
+        if (teclaPresionadaU && cadena_texto != ''){
+        
+            elem_actual_text= document.getElementById('actual-text');
+            elem_actual_text.setAttribute('value', cadena_texto);
+
+            var start= selection.anchorOffset;
+            var end= selection.focusOffset;
+            console.log("Start position: ", start);
+            console.log("End position: ", end);
+
+            //var myText= marcado_simple(actual_entity, actual_field, actual_color);  
+            var myText= marcado_simple('none', 'none', 'orange');
+            //$('span').css({"color":"red"});
+            eliminar_span_anidados();
+            return;
+            //main= document.getElementById('texto_anotacion');
+            //main.innerHTML= "Tecla U presionada";
+        }
+           
         if (cadena_texto != ''){
 
             elem_actual_text= document.getElementById('actual-text');
@@ -714,7 +819,7 @@ def run():
             range= selection.getRangeAt(0);
             focus_node= selection.focusNode;
             span_element= focus_node.parentElement;
-            console.log(span_element);
+            //console.log(span_element);
             //console.log(range);
             if (span_element.tagName == 'SPAN'){
                     
@@ -735,6 +840,7 @@ def run():
                     } 
                     else{
                     //Ya estaba marcada, entonces la desmarco
+                        console.log('ACTUALMENTE MARCADA');
                         span_element.style.setProperty('background-color', 'white');
                         span_element.setAttribute('entity', 'none');
                         span_element.setAttribute('field', 'none');
@@ -755,18 +861,19 @@ def run():
                     // <NO MARCADO> => <MARCAR CON 'actual-color'>
                     
                     cleared= removeAccents(cadena_texto);
-                    console.log("Cleared: ", cleared);
-                    console.log("Cadena de texto: ", cadena_texto);
+                    //console.log("Cleared: ", cleared);
+                    //console.log("Cadena de texto: ", cadena_texto);
 
                     modificador= "[^A-Za-záéíóú]"
                     modificador= "[^áéíóú]"
                     
                     palabras= cadena_texto.split(" ");
-                    console.log(palabras);
+                    console.log("PALABRAS: ", palabras);
+                    
                     if (palabras.length == 1)
-                      regex_word = new RegExp("\\\\b"+cleared+"\\\\b", "gi");
+                      regex_word = new RegExp("\\\\b"+cleared+"\\\\b", regexparams);
                     else
-                      regex_word = new RegExp("\\\\b"+cadena_texto+"\\\\b", "gi"); // Global and Case Insensitive Match
+                      regex_word = new RegExp("\\\\b"+cadena_texto+"\\\\b", regexparams); // Global and Case Insensitive Match
 
                     console.log('Regular Expression: ', regex_word)
 
@@ -793,15 +900,15 @@ def run():
                     parent= document.getElementById("texto_anotacion");
                     for (var i= 0; i< cleared_all_accents.length; i++){
                         word= cleared_all_accents[i]; 
-                        regex_word = new RegExp("\\\\b"+word+"\\\\b", "gi"); 
+                        regex_word = new RegExp("\\\\b"+word+"\\\\b", regexparams); 
                         parent.innerHTML = parent.innerHTML.replace(regex_word, span);
                     }
+                eliminar_span_anidados();
             }
             //Borrar etiques vacías
             spans= $("span[entity |= 'none']");
             $.each(spans, function(index, value){
-                parentNode= value.parentNode;
-                
+                parentNode= value.parentNode;               
                 if (value.style.getPropertyValue("background-color") == 'white'){
                     console.log('Borrado White Span');
                     value.replaceWith(document.createTextNode(value.textContent));}
@@ -810,10 +917,78 @@ def run():
 
         }
     }
-
+         
+    </script> 
     
+    <style>
+    
+        /* The Modal (background) */
+        .modal {
+        display: none; /* Hidden by default */
+        position: absolute; /* Stay in place */
+        //z-index: 1; /* Sit on top */
+        //padding-top: 100px; /* Location of the box */
+        left: 0;
+        top: 0;
+        width: auto; /* Full width */
+        height: auto; /* Full height */
+        overflow: auto; /* Enable scroll if needed */
+        //background-color: rgb(0,0,0); /* Fallback color */
+        //background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+        backbround-color: transparent;
+        }
+
+        /* Modal Content */
+        .modal-content {
+        background-color: #cae8ca;
+        margin: auto;
+        padding: 10px;
+        border: 2px solid #4CAF50;
+        width: 40%;
+        }
+
+        /* The Close Button */
+        .close {
+        color: #aaaaaa;
+        float: right;
+        font-size: 28px;
+        font-weight: bold;
+        }
+
+        .close:hover,
+        .close:focus {
+        color: #000;
+        text-decoration: none;
+        cursor: pointer;
+        }
+        </style>
         
-    </script> '''
+
+        
+
+        <!-- The Modal -->
+        <div id="myModal" class="modal">
+            <!-- Modal content -->
+            <div class="modal-content">
+                <span class="close" onclick="cerrar()">&times;</span>
+                <p id="texto-modal"> Some text in ...</p>
+            </div>
+        </div>
+        <script>
+            var modal= document.getElementById("myModal");
+           
+            window.onclick= function(event){
+                if (event.target == modal)
+                    modal.style.display= "none";
+                    
+            }
+            var xspan= document.getElementsByClassName("close")[0];
+            function cerrar(){
+               modal.style.display= "none";
+            }
+
+        </script>
+    '''
     
         
         
