@@ -716,15 +716,23 @@ def run():
                 
                 entity= value.getAttribute('entity');
                 field= value.getAttribute('field');
+                second_field= value.getAttribute('second_field');       
+
+                second_entity= value.getAttribute('second_entity');
+                third_field= value.getAttribute('third_field');
+                fourth_field= value.getAttribute('fourth_field');
+
                 console.log("Span entity: ", entity);
                 value.addEventListener("mouseover", function(event){
-                                        spanMouseOver(entity, field, event)
+                                        spanMouseOver(entity, field, second_field, 
+                                        second_entity, third_field, fourth_field, event)
                                         }, false);
                                         
             });
         }
     }
-    function spanMouseOver(entity, field, event){
+    function spanMouseOver(entity, field, second_field, second_entity, 
+                           third_field, fourth_field, event){
         checkbox= document.getElementById("mark-inline")
         left= event.clientX-80 + "px";
         tope= event.clientY + "px";
@@ -738,7 +746,9 @@ def run():
             modal.style.left= left;
             modal.style.display= "block";
             texto_modal= document.getElementById("texto-modal");
-            texto_modal.innerText= "Entity: "+ entity+" Field: "+field;
+            cadena= entity+" "+field;
+            cadena+= " "+ second_entity + " "+ third_field;
+            texto_modal.innerText= cadena;
 
         }
 
@@ -945,6 +955,7 @@ def run():
         padding: 10px;
         border: 2px solid #4CAF50;
         width: 40%;
+        font-size: 14px;
         }
 
         /* The Close Button */
