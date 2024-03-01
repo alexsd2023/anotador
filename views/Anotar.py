@@ -748,11 +748,34 @@ def run():
         //console.log("TOP: ", tope);
 
         entity= value.getAttribute('entity');
+        var cadena='';
+        if (entity != 'none')
+            cadena= entity;
         field= value.getAttribute('field');
-        second_field= value.getAttribute('second_field');       
+        if (field != 'none'){
+            cadena+= ' ';
+            cadena+= field;
+        }
+        second_field= value.getAttribute('second_field'); 
+        if (second_field != 'none'){
+            cadena+= ' ';
+            cadena+= second_field;
+        }      
         second_entity= value.getAttribute('second_entity');
+        if (second_entity != 'none'){
+            cadena+= ' ';
+            cadena+= second_entity;
+        }
         third_field= value.getAttribute('third_field');
+        if (third_field != 'none'){
+            cadena+= ' ';
+            cadena+= third_field;
+        }
         fourth_field= value.getAttribute('fourth_field');
+        if (fourth_field != 'none'){
+            cadena+= ' ';
+            cadena+= fourth_field;
+        }
 
         if (checkbox.checked){
             
@@ -761,8 +784,10 @@ def run():
             modal.style.left= left;
             modal.style.display= "block";
             texto_modal= document.getElementById("texto-modal");
-            cadena= entity+" "+field;
-            cadena+= " "+ second_entity + " "+ third_field;
+            //cadena= entity+" "+field;
+            //cadena+= " "+ second_entity + " "+ third_field;
+            if (cadena == '')
+                cadena= 'None annotations :(';
             texto_modal.innerText= cadena;
 
         }
@@ -972,9 +997,10 @@ def run():
         .modal-content {
         background-color: #cae8ca;
         margin: auto;
-        padding: 10px;
+        padding: 2%;
+        
         border: 2px solid #4CAF50;
-        width: 40%;
+        width: 60%;
         font-size: 14px;
         }
 
