@@ -794,6 +794,11 @@ def run():
         var elem;
         var actual_color;
         var regexparams= 'gi';
+        
+        
+        checkbox= document.getElementById("mark-inline");
+        if (checkbox.checked)
+            checkbox.checked= false;
 
         if (teclaPresionadaS){
            elem= document.getElementById('actual-entity');
