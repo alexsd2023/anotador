@@ -473,6 +473,7 @@ def run():
                 span.setAttribute('color', color);  
                 entity1= span.getAttribute('entity');
                 entity2= span.getAttribute('second_entity');
+                var field= span.getAttribute('field');
                 
                 if (entity1 == 'none'){
                 
