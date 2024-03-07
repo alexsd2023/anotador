@@ -432,8 +432,7 @@ def run():
         });
     }
     function setEntity(entity, color){
-    
-        
+          
         elem= document.getElementById("actual-entity");
         elem.setAttribute('value', entity)
         elem= document.getElementById("actual-color");
@@ -442,7 +441,10 @@ def run():
         last_text= document.getElementById('actual-text').value;
         //regex_word = new RegExp("\\\\b"+last_text+"\\\\b","g");
         //let span= "<span style='"+color+"';>"+last_text+"</span>";
-        
+
+        //var second_color= "white";
+        //var first_color= "white";
+
         if (teclaPresionadaU)
             spans= $("span[entity |= 'none']");
         else
@@ -466,21 +468,23 @@ def run():
             var campo='';
 
             if (str1 == str2){
-                span.style.setProperty('background-color', color);
-                span.style.setProperty('borderColor', color);
-                previous_color= span.getAttribute('color');
-                
-                span.setAttribute('color', color);  
+                // span.style.setProperty('background-color', color);
+                // span.style.setProperty('borderColor', color);
+                //previous_color= span.getAttribute('color');
+                //span.setAttribute('color', color);  
+
                 entity1= span.getAttribute('entity');
                 entity2= span.getAttribute('second_entity');
                 var field= span.getAttribute('field');
+                var third_field= span.getAttribute('third_field');
                 
                 if (entity1 == 'none'){
                 
                     span.setAttribute('entity', entity);
                     span.setAttribute('field', actual_field);
                     span.setAttribute('second_field', 'none');
-                    
+                    span.setAttribute('color', color); 
+                    span.style.setProperty('background-color', color);
                 }
                 else
                 {
@@ -498,8 +502,9 @@ def run():
                          span.setAttribute('second_entity', entity);
                          span.setAttribute('third_field', actual_field);
                          span.setAttribute('fourth_field', 'none');
-                         span.setAttribute('second_color', previous_color);
-                         span.style.setProperty('border', "3px solid "+previous_color);
+                         
+                         span.setAttribute('second_color', color);
+                         span.style.setProperty('border', "3px solid "+color);
                       }
                       else
                         if (entity2 == entity){
@@ -513,13 +518,16 @@ def run():
                             span.setAttribute('second_entity', entity);
                             span.setAttribute('third_field', actual_field);
                             span.setAttribute('fourth_field', 'none');
-                            span.setAttribute('second_color', previous_color);
-                            span.style.setProperty('border', "3px solid "+previous_color);
+                            span.setAttribute('second_color', color);
+                            span.style.setProperty('border', "3px solid "+color);
                         }
                 }
+                //span.style.setProperty('border', "3px solid "+second_color);
+                //span.style.setProperty('background-color', first_color);
             }    
         }
         toggleField= false;
+
         //elem= document.getElementById("actual-field");
         //elem.setAttribute('value', 'none');
     }
