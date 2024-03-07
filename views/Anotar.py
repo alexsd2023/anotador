@@ -679,6 +679,7 @@ def run():
     }
     var teclaPresionadaS = false;
     var teclaPresionadaU = false;
+    var teclaPresionadaD = false;
 
     document.addEventListener("keypress", function (e) {
         
@@ -692,6 +693,11 @@ def run():
             teclaPresionadaU = true;
             console.log(e.code);
         }
+        if(!teclaPresionadaD && e.code == 'KeyD'){
+            console.log("Tecla Presionada");
+            teclaPresionadaD = true;
+            console.log(e.code);
+        }
     });
 
     document.addEventListener("keyup", function (e) {
@@ -702,6 +708,10 @@ def run():
         if(teclaPresionadaU && e.code == 'KeyU'){
             console.log("Tecla Liberada");
             teclaPresionadaU = false;
+        }
+        if(teclaPresionadaD && e.code == 'KeyD'){
+            console.log("Tecla Liberada");
+            teclaPresionadaD = false;
         }
     });
 
@@ -903,21 +913,23 @@ def run():
                         span_element.setAttribute('second_color', 'white');
                     } 
                     else{
-                    //Ya estaba marcada, entonces la desmarco
-                        console.log('ACTUALMENTE MARCADA');
-                        span_element.style.setProperty('background-color', 'white');
-                        span_element.setAttribute('entity', 'none');
-                        span_element.setAttribute('field', 'none');
-                        span_element.setAttribute('second_field', 'none');
-                        span_element.setAttribute('color', 'white');
-                        span_element.setAttribute('second_color', 'white');
+                    if (teclaPresionadaD){
+                        //Ya estaba marcada, entonces la desmarco
+                            console.log('ACTUALMENTE MARCADA');
+                            span_element.style.setProperty('background-color', 'white');
+                            span_element.setAttribute('entity', 'none');
+                            span_element.setAttribute('field', 'none');
+                            span_element.setAttribute('second_field', 'none');
+                            span_element.setAttribute('color', 'white');
+                            span_element.setAttribute('second_color', 'white');
 
-                        span_element.setAttribute('second_entity', 'none');
-                        span_element.setAttribute('third_field', 'none');
-                        span_element.setAttribute('fourth_field', 'none');
+                            span_element.setAttribute('second_entity', 'none');
+                            span_element.setAttribute('third_field', 'none');
+                            span_element.setAttribute('fourth_field', 'none');
 
-                        span_text= span_element.textContent;
-                        //span_element.replaceWith(document.createTextNode(span_text));
+                            span_text= span_element.textContent;
+                            //span_element.replaceWith(document.createTextNode(span_text));
+                        }
                     }
             }
             else
