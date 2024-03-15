@@ -763,37 +763,47 @@ def run():
         checkbox= document.getElementById("mark-inline")
         left= event.clientX-80 + "px";
         tope= event.clientY + "px";
-        //console.log("LEFT: ",  left);
-        //console.log("TOP: ", tope);
+
+        left= event.pageX-80 + "px";
+        tope= event.pageY + "px";
+
+        console.log("LEFT: ",  left);
+        console.log("TOP: ", tope);
 
         entity= value.getAttribute('entity');
         var cadena='';
         if (entity != 'none')
-            cadena= entity;
+            //cadena= entity;
+            cadena= "<label><input type='checkbox' id='cbox1'/> "+ entity+"</label>";
         field= value.getAttribute('field');
         if (field != 'none'){
             cadena+= ' ';
-            cadena+= field;
+            //cadena+= field;
+            cadena+= "<label><input type='checkbox' id='cbox2'/> "+ field+"</label>";
         }
         second_field= value.getAttribute('second_field'); 
         if (second_field != 'none'){
             cadena+= ' ';
-            cadena+= second_field;
+            //cadena+= second_field;
+            cadena+= "<label><input type='checkbox' id='cbox3'/> "+ second_field+"</label>";
         }      
         second_entity= value.getAttribute('second_entity');
         if (second_entity != 'none'){
             cadena+= ' ';
-            cadena+= second_entity;
+            //cadena+= second_entity;
+            cadena+= "<label><input type='checkbox' id='cbox4'/> "+ second_entity+"</label>";
         }
         third_field= value.getAttribute('third_field');
         if (third_field != 'none'){
             cadena+= ' ';
-            cadena+= third_field;
+            //cadena+= third_field;
+            cadena+= "<label><input type='checkbox' id='cbox5'/> "+ third_field+"</label>";
         }
         fourth_field= value.getAttribute('fourth_field');
         if (fourth_field != 'none'){
             cadena+= ' ';
-            cadena+= fourth_field;
+            //cadena+= fourth_field;
+            cadena+= "<label><input type='checkbox' id='cbox6'/> "+ fourth_field+"</label>";
         }
 
         if (checkbox.checked){
@@ -806,8 +816,9 @@ def run():
             //cadena= entity+" "+field;
             //cadena+= " "+ second_entity + " "+ third_field;
             if (cadena == '')
-                cadena= 'None annotations :(';
-            texto_modal.innerText= cadena;
+                cadena= '<p><b>Empty annotations :( </b><p>';
+            //texto_modal.innerText= cadena;
+            texto_modal.innerHTML= cadena;
 
         }
 
