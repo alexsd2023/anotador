@@ -2,7 +2,7 @@ altair
 numpy
 pandas
 pydeck
-streamlit==1.29
+streamlit
 streamlit-option-menu
 matplotlib
 st-annotated-text
