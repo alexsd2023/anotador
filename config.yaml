@@ -1,17 +1,36 @@
 credentials:
   usernames:
-    jsmith:
-      email: jsmith@gmail.com
+    asanchez:
+      email: alex.sd2023@gmail.com
       failed_login_attempts: 0 # Will be managed automatically
       logged_in: False # Will be managed automatically
-      name: John Smith
-      password: abc # Will be hashed automatically
-    rbriggs:
+      name: Alexander Sanchez
+      password: 12345 # Will be hashed automatically
+    patricia:
       email: rbriggs@gmail.com
       failed_login_attempts: 0 # Will be managed automatically
       logged_in: False # Will be managed automatically
-      name: Rebecca Briggs
+      name: Patricia
       password: def # Will be hashed automatically
+    rodrigo:
+      email: rbriggs@gmail.com
+      failed_login_attempts: 0 # Will be managed automatically
+      logged_in: False # Will be managed automatically
+      name: Rodrigo
+      password: 12345 # Will be hashed automatically
+    mariana:
+      email: rbriggs@gmail.com
+      failed_login_attempts: 0 # Will be managed automatically
+      logged_in: False # Will be managed automatically
+      name: Mariana
+      password: 12345 # Will be hashed automatically
+    Leonardo:
+      email: rbriggs@gmail.com
+      failed_login_attempts: 0 # Will be managed automatically
+      logged_in: False # Will be managed automatically
+      name: Leonardo
+      password: 12345 # Will be hashed automatically
+    
 cookie:
   expiry_days: 30
   key: some_signature_key # Must be string
