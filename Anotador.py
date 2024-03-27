@@ -28,7 +28,7 @@ authenticator = stauth.Authenticate(
     config['cookie']['expiry_days'],
     config['pre-authorized']
 )
-name, authentication_status, username= authenticator.login()
+#name, authentication_status, username= authenticator.login()
 
 #def get_base64(bin_file):
 #    with open(bin_file, 'rb') as f:
@@ -63,7 +63,7 @@ name= ''
 authentication_status= False
 username= ''
 
-#name, authentication_status, username= authenticator.login("Login", "main")
+name, authentication_status, username= authenticator.login("Login", "main")
 #set_background('./background.png')
 
 if authentication_status:
