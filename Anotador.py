@@ -63,7 +63,7 @@ name= ''
 authentication_status= False
 username= ''
 
-name, authentication_status, username= authenticator.login("Login", "main")
+name, authentication_status, username= authenticator.login("main")
 #set_background('./background.png')
 
 if authentication_status:
