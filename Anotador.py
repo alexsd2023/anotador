@@ -19,6 +19,7 @@ import yaml
 from yaml.loader import SafeLoader
 with open('./credentials.yaml') as file:
     config= yaml.load(file, Loader= SafeLoader)
+    
 def get_base64(bin_file):
     with open(bin_file, 'rb') as f:
         data = f.read()
@@ -35,16 +36,16 @@ def set_background(png_file):
     </style>
     ''' % bin_str
     st.markdown(page_bg_img, unsafe_allow_html=True)
-usernames= ['asanchez', 'patricia', 'mariana', 'rodrigo']
-names= ['Alexander', 'Patricia', 'Mariana', 'Rodrigo']
-passwords= ['12345' ,'12345', '12345', '12345']
-credentials = {"usernames":{}}
+    
+#usernames= ['asanchez', 'patricia', 'mariana', 'rodrigo']
+#names= ['Alexander', 'Patricia', 'Mariana', 'Rodrigo']
+#passwords= ['12345' ,'12345', '12345', '12345']
+#credentials = {"usernames":{}}
 
-hashed_passwords = stauth.Hasher(passwords).generate()
-for un, name, pw in zip(usernames, names, hashed_passwords):   
-    user_dict = {"name":name,"password":pw}
-    credentials["usernames"].update({un:user_dict})
-
+#hashed_passwords = stauth.Hasher(passwords).generate()
+#for un, name, pw in zip(usernames, names, hashed_passwords):   
+#    user_dict = {"name":name,"password":pw}
+#    credentials["usernames"].update({un:user_dict})
 #authenticator = stauth.Authenticate(credentials, "lanccookie", "lanckey", cookie_expiry_days=30)
 
 
@@ -53,7 +54,7 @@ authenticator = stauth.Authenticate(
    config['cookie']['name'],
    config['cookie']['key'],
    config['cookie']['expiry_days'],
-   config['preauthorized']
+   config['pre-authorized']
 )
 st.session_state['authenticator']= authenticator
 name= ''
