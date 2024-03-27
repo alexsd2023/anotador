@@ -48,14 +48,14 @@ def set_background(png_file):
 #    credentials["usernames"].update({un:user_dict})
 #authenticator = stauth.Authenticate(credentials, "lanccookie", "lanckey", cookie_expiry_days=30)
 
-
 authenticator = stauth.Authenticate(
-   config['credentials'],
-   config['cookie']['name'],
-   config['cookie']['key'],
-   config['cookie']['expiry_days'],
-   config['pre-authorized']
+    config['credentials'],
+    config['cookie']['name'],
+    config['cookie']['key'],
+    config['cookie']['expiry_days'],
+    config['pre-authorized']
 )
+
 st.session_state['authenticator']= authenticator
 name= ''
 authentication_status= False
