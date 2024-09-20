@@ -34,8 +34,9 @@ def run():
         st.table(temp)
 
     options= []
-    basepath= './COLLECTIONS/'
-    for collection in glob.glob('./COLLECTIONS/*.csv'):
+    basepath= "COLLECTIONS/"
+    print(glob.glob('COLLECTIONS/*.csv'))
+    for collection in glob.glob('COLLECTIONS/*.csv'):
         options.append(os.path.basename(collection))
     
     collection= st.selectbox('Select a collection', options) 
